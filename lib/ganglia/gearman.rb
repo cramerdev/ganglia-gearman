@@ -1,7 +1,17 @@
 require "ganglia/gearman/version"
 
 module Ganglia
-  module Gearman
-    # Your code goes here...
+  class Gearman
+    def initialize(options = {})
+
+    end
+
+    def check
+      self
+    end
+
+    def send
+      self
+    end
   end
 end
