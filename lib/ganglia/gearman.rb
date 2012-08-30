@@ -1,4 +1,4 @@
-require "ganglia-gearman/version"
+require "ganglia/gearman/version"
 
 module Ganglia
   module Gearman
