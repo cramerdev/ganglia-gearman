@@ -7,7 +7,7 @@ describe Ganglia::Gearman::GearmanServer do
 
     before :each do
       file = open('spec/support/fixtures/status.txt')
-      file.stub(:puts)#.and_return(nil)
+      file.stub(:puts)
       server.stub(:socket).and_return(file)
     end
 
