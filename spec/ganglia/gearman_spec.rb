@@ -21,6 +21,9 @@ describe Ganglia::Gearman do
     end
   end
 
-  describe '#send' do
+  describe '#report' do
+    xit 'should send the status to ganglia (TODO: stub the connections)' do
+      ganglia_gearman.report.should be_true
+    end
   end
 end

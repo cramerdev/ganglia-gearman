@@ -1,4 +1,6 @@
-require "ganglia/gearman/version"
+require 'ganglia/gearman/version'
+require 'ganglia/gearman/gearman_server'
+require 'ganglia/gearman/ganglia_connection'
 
 module Ganglia
   class Gearman
@@ -10,7 +12,15 @@ module Ganglia
       @gmond_port = options[:gmond_port] || 8649
     end
 
-    def send
+    def report
+
+      GangliaConnection.new(@gmond_host, @gmond_port).report(status)
+    end
+
+    private
+
+    def status
+      @status ||= GearmanServer.new(@gearman_host, @gearman_port).status
     end
   end
 end
