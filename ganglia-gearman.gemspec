@@ -14,4 +14,6 @@ Gem::Specification.new do |gem|
   gem.name          = "ganglia-gearman"
   gem.require_paths = ["lib"]
   gem.version       = Ganglia::Gearman::VERSION
+
+  gem.add_dependency 'gmetric'
 end

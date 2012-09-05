@@ -2,4 +2,4 @@
 
 require 'ganglia/gearman'
 
-Ganglia::Gearman.new.send
+Ganglia::Gearman.new.report
