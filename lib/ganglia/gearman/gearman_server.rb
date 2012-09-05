@@ -12,12 +12,10 @@ module Ganglia
         s = socket
         results = []
         s.puts 'status'
-        while line = s.gets
-          break if line.chop == "."
-          (name, total, running, available) = line.split(/\t/)
-          (worker, ability) = name.split(':')
-          results << { :worker    => worker,
-                       :ability   => ability,
+        while line = s.gets.chomp
+          break if line == "."
+          (function, total, running, available) = line.split(/\t/)
+          results << { :function  => function,
                        :total     => total.to_i,
                        :running   => running.to_i,
                        :available => available.to_i }

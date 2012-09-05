@@ -12,9 +12,9 @@ describe Ganglia::Gearman::GearmanServer do
     end
 
     it { should eql([
-      { :worker => 'worker_one', :ability => 'ability_one',   :total => 1, :running => 2, :available => 3 },
-      { :worker => 'worker_one', :ability => 'ability_two',   :total => 4, :running => 5, :available => 6 },
-      { :worker => 'worker_two', :ability => 'ability_three', :total => 7, :running => 8, :available => 9 }
+      { :function => 'worker_one:ability_one', :total => 1, :running => 2, :available => 3 },
+      { :function => 'worker_one:ability_two', :total => 4, :running => 5, :available => 6 },
+      { :function => 'worker_two:ability_three', :total => 7, :running => 8, :available => 9 }
     ]) }
   end
 end
