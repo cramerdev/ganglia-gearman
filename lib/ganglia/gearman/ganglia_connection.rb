@@ -11,17 +11,16 @@ module Ganglia
       def report(functions)
         functions.each do |function|
           self.class.metrics_for(function).each do |metric|
-            p metric
-            Ganglia::GMetric.send(metric)
+            Ganglia::GMetric.send(@host, @port, metric)
           end
         end
       end
 
       def self.metrics_for(function)
         [:total, :running, :available].map do |metric|
-          self.class.to_gmetric({ :function => function[:function],
+          to_gmetric({ :function => function[:function],
                                   :metric   => metric,
-                                  :value    => function[:value] })
+                                  :value    => function[metric] })
         end
       end
 

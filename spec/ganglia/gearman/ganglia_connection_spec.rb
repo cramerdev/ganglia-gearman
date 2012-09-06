@@ -14,6 +14,7 @@ describe Ganglia::Gearman::GangliaConnection do
 
     it 'should send 3 metrics for each function' do
       Ganglia::GMetric.should_receive(:send).exactly(metrics.length * 3).times
+      described_class.new.report(metrics)
     end
   end
 end
