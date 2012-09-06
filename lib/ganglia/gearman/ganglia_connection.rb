@@ -11,7 +11,7 @@ module Ganglia
 
       def report(functions)
         functions.each do |function|
-          self.class.metrics_for(function).each do |metric|
+          metrics_for(function).each do |metric|
             begin
               Ganglia::GMetric.send(@host, @port, metric)
             rescue Errno::ECONNREFUSED, SocketError => e
@@ -21,7 +21,7 @@ module Ganglia
         end
       end
 
-      def self.metrics_for(function)
+      def metrics_for(function)
         [:total, :running, :available].map do |metric|
           to_gmetric({ :function => function[:function],
                                   :metric   => metric,
@@ -29,7 +29,7 @@ module Ganglia
         end
       end
 
-      def self.to_gmetric(metric)
+      def to_gmetric(metric)
         m = {
           :name  => "#{metric[:function] }_#{metric[:metric]}",
           :type  => 'uint32',
