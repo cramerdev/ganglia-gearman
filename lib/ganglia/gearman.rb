@@ -26,7 +26,7 @@ module Ganglia
     end
 
     def ganglia
-      @ganglia ||= GangliaConnection.new(@gmond_host, @gmond_port)
+      @ganglia ||= GangliaConnection.new(@gmond_host, @gmond_port, @gmond_spoof)
     end
   end
 end
