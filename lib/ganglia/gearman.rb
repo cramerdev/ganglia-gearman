@@ -8,19 +8,25 @@ module Ganglia
       @gearman_host = options[:gearman_host] || '127.0.0.1'
       @gearman_port = options[:gearman_port] || 4730
 
-      @gmond_host = options[:gmond_host] || '127.0.0.1'
-      @gmond_port = options[:gmond_port] || 8649
+      @gmond_host = options[:ganglia_host] || '127.0.0.1'
+      @gmond_port = options[:ganglia_port] || 8649
+      @gmond_spoof = options[:spoof]
+
+      @interval = options[:inteval] || 1
     end
 
-    def report
-
-      GangliaConnection.new(@gmond_host, @gmond_port).report(status)
+    def run
+      gearman.run(lambda {|status| ganglia.report(status) }, @interval)
     end
 
     private
 
-    def status
-      @status ||= GearmanServer.new(@gearman_host, @gearman_port).status
+    def gearman
+      @gearman ||= GearmanServer.new(@gearman_host, @gearman_port)
+    end
+
+    def ganglia
+      @ganglia ||= GangliaConnection.new(@gmond_host, @gmond_port)
     end
   end
 end

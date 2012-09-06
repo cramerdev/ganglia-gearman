@@ -3,15 +3,20 @@ require 'gmetric'
 module Ganglia
   class Gearman
     class GangliaConnection
-      def initialize(host = '127.0.0.1', port = 8649)
+      def initialize(host = '127.0.0.1', port = 8649, spoof = false)
         @host = host
         @port = port
+        @spoof = spoof
       end
 
       def report(functions)
         functions.each do |function|
           self.class.metrics_for(function).each do |metric|
-            Ganglia::GMetric.send(@host, @port, metric)
+            begin
+              Ganglia::GMetric.send(@host, @port, metric)
+            rescue Errno::ECONNREFUSED, SocketError => e
+              STDERR.puts("Connection to #{@host}:#{@port} refused")
+            end
           end
         end
       end
@@ -25,7 +30,7 @@ module Ganglia
       end
 
       def self.to_gmetric(metric)
-        {
+        m = {
           :name  => "#{metric[:function] }_#{metric[:metric]}",
           :type  => 'uint32',
           :value => metric[:value],
@@ -33,6 +38,8 @@ module Ganglia
           :dmax  => 300,
           :group => 'gearman'
         }
+        m.merge!({ :spoof => true, :hostname => @spoof }) if @spoof
+        m
       end
     end
   end

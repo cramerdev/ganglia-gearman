@@ -9,26 +9,30 @@ module Ganglia
       end
 
       def status
-        s = socket
         results = []
-        s.puts 'status'
-        while line = s.gets.chomp
-          break if line == "."
-          (function, total, running, available) = line.split(/\t/)
-          results << { :function  => function,
-                       :total     => total.to_i,
-                       :running   => running.to_i,
-                       :available => available.to_i }
+        begin
+          TCPSocket.open(@host, @port) do |s|
+            s.puts 'status'
+            while line = s.gets.chomp
+              break if line == "."
+              (function, total, running, available) = line.split(/\t/)
+              results << { :function  => function,
+                           :total     => total.to_i,
+                           :running   => running.to_i,
+                           :available => available.to_i }
+            end
+          end
+        rescue Errno::ECONNREFUSED, SocketError => e
+          STDERR.puts("Connection to #{@host}:#{@port} refused")
         end
         results
-      ensure
-        s.close
       end
 
-      private
-
-      def socket
-        @socket ||= TCPSocket.new(@host, @port)
+      def run(callback, interval = 1)
+        loop do
+          callback.call(status)
+          sleep interval
+        end
       end
     end
   end

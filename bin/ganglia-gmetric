@@ -1,5 +1,18 @@
 #!/usr/bin/env ruby
 
+require 'optparse'
 require 'ganglia/gearman'
 
-Ganglia::Gearman.new.report
+options = {}
+
+OptionParser.new do |opts|
+  opts.on('--ganglia-host HOST', String, 'Ganglia host') do |host|
+    options[:ganglia_host] = host
+  end
+
+  opts.on('--ganglia-spoof IP_ADDRESS:HOSTNAME', String, 'Ganglia spoof (ip_address:hostname)') do |spoof|
+    options[:spoof] = spoof
+  end
+end.parse(ARGV)
+
+Ganglia::Gearman.new(options).run
